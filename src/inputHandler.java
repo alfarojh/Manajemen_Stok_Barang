@@ -9,7 +9,7 @@ public class inputHandler {
     }
 
     // Mengecek apakah input adalah bilangan bulat (digit) dan mengembalikan nilai bilangan bulat
-    public int isDigit (String message) {
+    public int getIntegerInputWithDigitValidation (String message) {
         System.out.print(message);
         String input = scanner.nextLine();
         while (!input.matches("\\d+")) {
@@ -21,12 +21,12 @@ public class inputHandler {
     }
 
     // Menerima input teks dari pengguna dan mengembalikan teks tersebut
-    public String inputText () {
+    public String getUserInputText () {
         return scanner.nextLine();
     }
 
     // Menutup scanner setelah penggunaan selesai
-    public void closeScanner () {
+    public void close () {
         scanner.close();
     }
 }

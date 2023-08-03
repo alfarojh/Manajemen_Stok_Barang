@@ -7,7 +7,7 @@ public class Main {
         while (true){
             try {
                 // Menampilkan menu dan mendapatkan pilihan dari pengguna
-                int pilih = inputHandler.isDigit(tampilMenu());
+                int pilih = inputHandler.getIntegerInputWithDigitValidation(tampilMenu());
                 System.out.println("===========================\n");
                 switch (pilih) {
                     case 0 ->
@@ -18,7 +18,7 @@ public class Main {
                             stokGudang.tambahKategori();
                     case 2 -> {
                         // Menampilkan daftar kategori dan mendapatkan pilihan kategori dari pengguna
-                        pilih = inputHandler.isDigit(tampilItem());
+                        pilih = inputHandler.getIntegerInputWithDigitValidation(tampilItem());
                         if (pilih == 0) {
                             continue;
                         } // Jika pengguna memilih 0, kembali ke menu utama
@@ -41,7 +41,7 @@ public class Main {
             }
             System.out.println("\n\n");
         }
-        inputHandler.closeScanner();
+        inputHandler.close();
     }
 
     // Menampilkan menu utama dalam bentuk string
