@@ -15,7 +15,7 @@ public class Main {
                             throw new Exception();
                     case 1 ->
                         // Memanggil metode untuk menambahkan kategori ke dalam gudang
-                            stokGudang.tambahKategori();
+                            stokGudang.addCategory();
                     case 2 -> {
                         // Menampilkan daftar kategori dan mendapatkan pilihan kategori dari pengguna
                         pilih = inputHandler.getIntegerInputWithDigitValidation(tampilItem());
@@ -24,15 +24,15 @@ public class Main {
                         } // Jika pengguna memilih 0, kembali ke menu utama
 
                         // Menampilkan daftar barang dalam kategori yang dipilih dan memanggil metode untuk menambahkan barang baru pada kategori tersebut
-                        System.out.println(stokGudang.tampilkanListBarangKategori(pilih - 1));
-                        stokGudang.tambahBarang(pilih - 1);
+                        System.out.println(stokGudang.displayItemsInCategory(pilih - 1));
+                        stokGudang.addItem(pilih - 1);
                     }
                     case 3 ->
                         // Memanggil metode untuk mengupdate barang yang sudah ada di dalam gudang
-                            stokGudang.updateBarang();
+                            stokGudang.updateItem();
                     case 4 ->
                         // Memanggil metode untuk menampilkan daftar semua barang yang ada di dalam gudang
-                            stokGudang.tampilkanListBarang();
+                            stokGudang.displayAllItems();
                 }
             } catch (Exception e) {
                 // Menangkap dan menampilkan pesan jika terjadi exception (kesalahan)
@@ -59,7 +59,7 @@ public class Main {
 
     // Menampilkan daftar kategori dan meminta pengguna untuk memilih kategori dalam bentuk string
     private static String tampilItem () {
-        return stokGudang.tampilkanKategori() +
+        return stokGudang.displayCategory() +
                 "0. Keluar\n" +
                 "Silakan pilih kategori: ";
     }

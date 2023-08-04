@@ -1,208 +1,223 @@
 public class StokGudang {
     private final inputHandler inputHandler = new inputHandler();
-    private String[][][] stokBarang = {{{"Baju", "5"}}}; // Database untuk menyimpan stok barang yang berisi informasi nama barang dan jumlahnya
-    private String[] kategori = {"Pakaian"}; // Database untuk menyimpan daftar kategori barang
+    private String[][][] itemStock = {{{"Baju", "5"}}}; // Database untuk menyimpan stok barang yang berisi informasi nama barang dan jumlahnya
+    private String[] category = {"Pakaian"}; // Database untuk menyimpan daftar kategori barang
 
-    // Metode untuk menampilkan menu kategori
-    private String tampilanMenuKategori() {
-        return tampilkanKategori() +
-                "0. Tambah Kategori\n" +
+
+    // Fungsi ini menampilkan menu kategori yang ada
+    private String displayCategoryMenu() {
+        return displayCategory() +
+                "0. Tambah kategori\n" +
                 "Silahkan masukkan pilihan: ";
     }
 
-    public void tambahKategori() {
-        // Mendapatkan pilihan dari pengguna
-        int pilih = inputHandler.getIntegerInputWithDigitValidation(tampilanMenuKategori());
+    // Fungsi ini menambahkan kategori baru atau menampilkan barang dalam kategori yang dipilih
+    public void addCategory() {
+        int pilih = inputHandler.getIntegerInputWithDigitValidation(displayCategoryMenu());
 
-        // Jika pilihan 0, tambah kategori baru
         if (pilih == 0) {
-            String[] tmpKategori = new String[kategori.length + 1];
-            String namaKategori = "";
-            boolean error = true;
-
-            // Meminta pengguna untuk memasukkan nama kategori baru yang belum ada sebelumnya
-            while (error) {
-                error = false;
-                System.out.print("Berikan nama kategori: ");
-                namaKategori = inputHandler.getUserInputText();
-
-                // Memeriksa apakah nama kategori sudah ada dalam daftar kategori yang ada
-                for (String s : kategori) {
-                    if (s.equals(namaKategori)) {
-                        inputHandler.errorMessage("Kategori sudah ada!");
-                        error = true;
-                        break;
-                    }
-                }
-            }
-
-            // Meminta pengguna untuk memasukkan nama barang baru dan jumlah itemnya
-            System.out.print("Masukkan nama barang: ");
-            String namaBarang = inputHandler.getUserInputText();
-            String jumlahItem = String.valueOf(inputHandler.getIntegerInputWithDigitValidation("Masukkan jumlah item: "));
-
-            // Menyalin isi array kategori ke array sementara (tmpKategori) dengan ukuran yang lebih besar
-            System.arraycopy(kategori, 0, tmpKategori, 0, kategori.length);
-            tmpKategori[kategori.length] = namaKategori;
-            kategori = tmpKategori;
-
-            // Menyalin isi array stokBarang ke array sementara (tmpArray) dengan ukuran yang lebih besar
-            String[][][] tmpArray = new String[stokBarang.length + 1][stokBarang[0].length][2];
-            for (int i = 0; i < stokBarang.length; i++) {
-                for (int j = 0; j < stokBarang[0].length; j++) {
-                    tmpArray[i][j][0] = stokBarang[i][j][0];
-                    tmpArray[i][j][1] = stokBarang[i][j][1];
-                }
-            }
-
-            // Menambahkan barang baru ke dalam array sementara (tmpArray) dengan jumlah item yang dimasukkan
-            tmpArray[stokBarang.length][0][0] = namaBarang;
-            tmpArray[stokBarang.length][0][1] = jumlahItem;
-            stokBarang = tmpArray;
+            addNewCategory(); // Jika pilihan 0, tambahkan kategori baru
         } else {
-            // Jika pilihan bukan 0, tampilkan daftar barang pada kategori yang dipilih
             System.out.println();
-            System.out.println(tampilkanListBarangKategori(pilih - 1));
+            System.out.println(displayItemsInCategory(pilih - 1)); // Tampilkan barang dalam kategori yang dipilih
         }
     }
 
-    public void tambahBarang(int indexKategori) {
-        // Memastikan indexKategori tidak melebihi jumlah kategori yang ada (validasi)
-        if (indexKategori < stokBarang.length) {
-            int indexItemKosong = -1;
+    // Fungsi ini menambahkan kategori baru
+    private void addNewCategory() {
+        String[] tmpcategory = new String[category.length + 1];
+        String namacategory = "";
+        boolean error = true;
 
-            // Mencari indeks item kosong (null) pada kategori yang dipilih
-            for (int i = 0; i < stokBarang[indexKategori].length; i++) {
-                if (stokBarang[indexKategori][i][0] == null) {
-                    indexItemKosong = i;
+        while (error) {
+            error = false;
+            System.out.print("Berikan nama category: ");
+            namacategory = inputHandler.getUserInputText();
+
+            // Periksa apakah kategori sudah ada sebelumnya
+            for (String s : category) {
+                if (s.equals(namacategory)) {
+                    inputHandler.errorMessage("category sudah ada!");
+                    error = true;
                     break;
                 }
             }
-            String namaBarang = "";
-            boolean error = true;
-
-            // Meminta pengguna untuk memasukkan nama barang baru yang belum ada sebelumnya dalam kategori yang dipilih
-            while (error) {
-                error = false;
-                System.out.print("Masukkan nama barang baru: ");
-                namaBarang = inputHandler.getUserInputText();
-
-                // Memeriksa apakah nama barang sudah ada dalam kategori yang dipilih
-                for (int i = 0; i < stokBarang[indexKategori].length; i++) {
-                    if (namaBarang.equals(stokBarang[indexKategori][i][0])) {
-                        inputHandler.errorMessage("Barang sudah ada!");
-                        error = true;
-                        break;
-                    }
-                }
-            }
-
-            // Meminta pengguna untuk memasukkan jumlah item baru dan mengkonversi ke dalam bentuk String
-            String jumlahItem = String.valueOf(inputHandler.getIntegerInputWithDigitValidation("Masukkan jumlah item: "));
-
-            if (indexItemKosong >= 0) {
-                // Jika ada indeks item kosong (null), tambahkan barang baru pada indeks tersebut
-                stokBarang[indexKategori][indexItemKosong][0] = namaBarang;
-                stokBarang[indexKategori][indexItemKosong][1] = jumlahItem;
-            } else {
-                // Jika tidak ada indeks item kosong, buat array baru dengan ukuran yang lebih besar untuk menampung barang baru
-                String[][][] tmpArray = new String[stokBarang.length][stokBarang[0].length + 1][2];
-                for (int i = 0; i < stokBarang.length; i++) {
-                    for (int j = 0; j < stokBarang[0].length; j++) {
-                        tmpArray[i][j][0] = stokBarang[i][j][0];
-                        tmpArray[i][j][1] = stokBarang[i][j][1];
-                    }
-                }
-                // Tambahkan barang baru pada array baru
-                tmpArray[indexKategori][stokBarang[0].length][0] = namaBarang;
-                tmpArray[indexKategori][stokBarang[0].length][1] = jumlahItem;
-                stokBarang = tmpArray; // Timpa array stokBarang dengan array baru
-            }
-        } else {
-            // Jika indexKategori tidak valid (melebihi jumlah kategori yang ada), tampilkan pesan error
-            inputHandler.errorMessage("Maaf, kategori tidak ditemukan\n" +
-                    "Barang gagal ditambahkan!");
         }
+
+        System.out.print("Masukkan nama barang: ");
+        String namaBarang = inputHandler.getUserInputText();
+        String jumlahItem = String.valueOf(inputHandler.getIntegerInputWithDigitValidation("Masukkan jumlah item: "));
+
+        // Salin isi array category ke dalam array tmpcategory
+        System.arraycopy(category, 0, tmpcategory, 0, category.length);
+        tmpcategory[category.length] = namacategory; // Tambahkan kategori baru ke dalam tmpcategory
+        category = tmpcategory; // Timpa array category dengan array tmpcategory yang sudah ditambahkan kategori baru
+
+        addItemToCategoryInStock(namaBarang, jumlahItem); // Tambahkan barang ke dalam kategori yang baru dibuat
     }
 
-    public String tampilkanListBarangKategori(int indexKategori) {
+
+    // Fungsi ini menambahkan barang baru ke dalam kategori dan stok barang.
+    private void addItemToCategoryInStock(String namaBarang, String jumlahItem) {
+        // Buat array baru dengan ukuran lebih besar untuk menampung barang baru.
+        String[][][] tmpArray = new String[itemStock.length + 1][itemStock[0].length][2];
+
+        // Salin isi array itemStock ke dalam tmpArray.
+        for (int i = 0; i < itemStock.length; i++) {
+            for (int j = 0; j < itemStock[0].length; j++) {
+                tmpArray[i][j][0] = itemStock[i][j][0];
+                tmpArray[i][j][1] = itemStock[i][j][1];
+            }
+        }
+
+        // Tambahkan barang baru ke dalam tmpArray.
+        tmpArray[itemStock.length][0][0] = namaBarang;
+        tmpArray[itemStock.length][0][1] = jumlahItem;
+
+        // Timpa array itemStock dengan array tmpArray yang sudah ditambahkan barang baru.
+        itemStock = tmpArray;
+    }
+
+    // Fungsi ini menambahkan barang baru ke dalam kategori yang sudah ada atau membuat kategori baru jika tidak ada kategori yang sesuai.
+    public void addItem(int indexCategory) {
+        if (indexCategory >= itemStock.length) {
+            inputHandler.errorMessage("Maaf, kategori tidak ditemukan\nBarang gagal ditambahkan!");
+            return;
+        }
+
+        String namaBarang = "";
+        boolean error = true;
+
+        while (error) {
+            error = false;
+            System.out.print("Masukkan nama barang baru: ");
+            namaBarang = inputHandler.getUserInputText();
+
+            // Periksa apakah barang dengan nama yang sama sudah ada dalam kategori yang dipilih.
+            for (int i = 0; i < itemStock[indexCategory].length; i++) {
+                if (namaBarang.equals(itemStock[indexCategory][i][0])) {
+                    inputHandler.errorMessage("Barang sudah ada!");
+                    error = true;
+                    break;
+                }
+            }
+        }
+
+        String jumlahItem = String.valueOf(inputHandler.getIntegerInputWithDigitValidation("Masukkan jumlah item:"));
+
+        // Tambahkan barang ke indeks yang kosong dalam kategori.
+        for (int i = 0; i < itemStock[indexCategory].length; i++) {
+            if (itemStock[indexCategory][i][0] == null) {
+                itemStock[indexCategory][i][0] = namaBarang;
+                itemStock[indexCategory][i][1] = jumlahItem;
+                return; // Keluar dari fungsi setelah barang ditambahkan.
+            }
+        }
+
+        // Jika tidak ada indeks kosong, tambahkan barang baru ke dalam kategori dengan ukuran array itemStock yang diperbesar.
+        addItemBasedOnStock(indexCategory, namaBarang, jumlahItem);
+    }
+
+    // Fungsi ini menambahkan barang baru ke dalam kategori yang sudah ada dengan memperluas ukuran array itemStock jika kategori tersebut belum memiliki indeks kosong.
+    private void addItemBasedOnStock(int indexCategory, String namaBarang, String jumlahItem) {
+        // Buat array baru dengan ukuran lebih besar untuk menampung barang baru dalam kategori yang sudah ada.
+        String[][][] tmpArray = new String[itemStock.length][itemStock[0].length + 1][2];
+
+        // Salin isi array itemStock ke dalam tmpArray.
+        for (int i = 0; i < itemStock.length; i++) {
+            for (int j = 0; j < itemStock[0].length; j++) {
+                tmpArray[i][j][0] = itemStock[i][j][0];
+                tmpArray[i][j][1] = itemStock[i][j][1];
+            }
+        }
+
+        // Tambahkan barang baru ke dalam tmpArray pada indeks yang baru.
+        tmpArray[indexCategory][itemStock[0].length][0] = namaBarang;
+        tmpArray[indexCategory][itemStock[0].length][1] = jumlahItem;
+
+        // Timpa array itemStock dengan array tmpArray yang sudah ditambahkan barang baru dalam kategori yang sudah ada.
+        itemStock = tmpArray;
+    }
+
+
+    // Fungsi ini menampilkan daftar item pada kategori tertentu dalam bentuk string
+    public String displayItemsInCategory(int indexCategory) {
         StringBuilder text = new StringBuilder();
-        if (indexKategori < stokBarang.length) {
+        if (indexCategory < itemStock.length) {
             // Tampilkan daftar item pada kategori yang dipilih
-            System.out.println("\nList item untuk kategori " + kategori[indexKategori]);
-            for (int i = 0; i < stokBarang[0].length; i++) {
-                if (stokBarang[indexKategori][i][0] != null) {
+            System.out.println("\nList item untuk category " + category[indexCategory]);
+            for (int i = 0; i < itemStock[0].length; i++) {
+                if (itemStock[indexCategory][i][0] != null) {
                     // Hanya tampilkan item dengan nama barang (non-null)
-                    text.append((i + 1)).append(". ").append(stokBarang[indexKategori][i][0]).append(": ").append(stokBarang[indexKategori][i][1]).append("\n");
+                    text.append((i + 1)).append(". ").append(itemStock[indexCategory][i][0]).append(": ").append(itemStock[indexCategory][i][1]).append("\n");
                 }
             }
         }
-        return text.toString(); // Mengembalikan daftar item pada kategori yang dipilih dalam bentuk string
+        return text.toString(); // Mengembalikan daftar item pada category yang dipilih dalam bentuk string
     }
 
-    private String tampilanMenuUpdateKategori() {
-        return "Kategori\n" +
-                tampilkanKategori() +
-                "Pilih kategori yang ingin diupdate: ";
-    }
-
-    private String tampilanMenuUpdateItem(int indexKategori) {
-        return tampilkanListBarangKategori(indexKategori - 1) + "\n" +
-                "Pilih item yang ingin diupdate: ";
-    }
-
-    public void updateBarang() {
-        // Meminta pengguna untuk memilih kategori yang akan diupdate
-        int indexKategori = inputHandler.getIntegerInputWithDigitValidation(tampilanMenuUpdateKategori());
-
-        // Melakukan validasi untuk memastikan indexKategori tidak melebihi jumlah kategori yang ada
-        while (indexKategori > kategori.length) {
-            inputHandler.errorMessage("Input melebihi batas kategori");
-            indexKategori = inputHandler.getIntegerInputWithDigitValidation(tampilanMenuUpdateKategori());
-        }
-
-        // Meminta pengguna untuk memilih item pada kategori yang akan diupdate
-        int indexItem = inputHandler.getIntegerInputWithDigitValidation(tampilanMenuUpdateItem(indexKategori));
-
-        // Melakukan validasi untuk memastikan indexItem tidak melebihi jumlah item pada kategori yang dipilih
-        while (indexItem > stokBarang[indexKategori - 1].length) {
-            inputHandler.errorMessage("Input melebihi batas item");
-            indexItem = inputHandler.getIntegerInputWithDigitValidation(tampilanMenuUpdateItem(indexKategori));
-        }
-
-        // Meminta pengguna untuk memasukkan jumlah item yang akan diupdate (dalam bentuk +/-)
-        int jumlahItem = inputHandler.getIntegerInputWithDigitValidation("Masukkan jumlah (+/-): ");
-
-        // Melakukan pengecekan apakah jumlah item setelah diupdate masih non-negatif
-        if (Integer.parseInt(stokBarang[indexKategori - 1][indexItem - 1][1]) + jumlahItem >= 0) {
-            // Jika jumlah item setelah diupdate masih non-negatif, lakukan update jumlah item
-            int convertInt = Integer.parseInt(stokBarang[indexKategori - 1][indexItem - 1][1]);
-            stokBarang[indexKategori - 1][indexItem - 1][1] = String.valueOf(convertInt + jumlahItem);
-        } else {
-            // Jika jumlah item setelah diupdate negatif, tampilkan pesan error
-            inputHandler.errorMessage("Maaf, item tidak mencukupi");
-        }
-    }
-
-    public String tampilkanKategori() {
-        // Menampilkan daftar kategori yang ada dalam bentuk string
+    // Fungsi ini menampilkan daftar kategori yang ada dalam bentuk string
+    public String displayCategory() {
         StringBuilder text = new StringBuilder();
-        for (int i = 0; i < kategori.length; i++) {
-            text.append((i + 1)).append(". ").append(kategori[i]).append("\n");
+        for (int i = 0; i < category.length; i++) {
+            text.append((i + 1)).append(". ").append(category[i]).append("\n");
         }
         return text.toString();
     }
 
-    public void tampilkanListBarang() {
-        // Menampilkan daftar barang untuk setiap kategori yang ada
-        for (int i = 0; i < stokBarang.length; i++) {
-            System.out.println("Kategori: " + kategori[i]);
-            for (int j = 0; j < stokBarang[0].length; j++) {
-                if (stokBarang[i][j][0] != null) {
-                    System.out.println("    " + (j + 1) + ". " + stokBarang[i][j][0] + " - jumlah: " + stokBarang[i][j][1]);
+    // Fungsi ini menampilkan menu pemilihan kategori dalam bentuk string
+    private String displayCategorySelection() {
+        return "Kategori \n" +
+                displayCategory() +
+                "Pilih category yang ingin diupdate: ";
+    }
+
+    // Fungsi ini menampilkan menu pemilihan item berdasarkan kategori yang dipilih dalam bentuk string
+    private String displayItemSelectionByCategory(int indexCategory) {
+        return displayItemsInCategory(indexCategory - 1) + "\n" +
+                "Pilih item yang ingin diupdate: ";
+    }
+
+    // Fungsi ini digunakan untuk mengupdate jumlah item pada kategori dan item yang dipilih
+    public void updateItem() {
+        int indexCategory = inputHandler.getIntegerInputWithDigitValidation(displayCategorySelection());
+
+        while (indexCategory > category.length) {
+            inputHandler.errorMessage("Input melebihi batas category");
+            indexCategory = inputHandler.getIntegerInputWithDigitValidation(displayCategorySelection());
+        }
+
+        int indexItem = inputHandler.getIntegerInputWithDigitValidation(displayItemSelectionByCategory(indexCategory));
+
+        while (indexItem > itemStock[indexCategory - 1].length) {
+            inputHandler.errorMessage("Input melebihi batas item");
+            indexItem = inputHandler.getIntegerInputWithDigitValidation(displayItemSelectionByCategory(indexCategory));
+        }
+
+        int jumlahItem = inputHandler.getIntegerInputWithDigitValidation("Masukkan jumlah (+/-): ");
+
+        updateStockItem(indexCategory, indexItem, jumlahItem);
+    }
+
+    // Fungsi ini digunakan untuk mengupdate jumlah item pada kategori dan item yang dipilih
+    private void updateStockItem(int indexCategory, int indexItem, int jumlahItem) {
+        if (Integer.parseInt(itemStock[indexCategory - 1][indexItem - 1][1]) + jumlahItem >= 0) {
+            int convertInt = Integer.parseInt(itemStock[indexCategory - 1][indexItem - 1][1]);
+            itemStock[indexCategory - 1][indexItem - 1][1] = String.valueOf(convertInt + jumlahItem);
+        } else {
+            inputHandler.errorMessage("Maaf, item tidak mencukupi");
+        }
+    }
+
+    // Fungsi ini menampilkan daftar barang untuk setiap kategori yang ada
+    public void displayAllItems() {
+        for (int i = 0; i < itemStock.length; i++) {
+            System.out.println("Kategori: " + category[i]);
+            for (int j = 0; j < itemStock[0].length; j++) {
+                if (itemStock[i][j][0] != null) {
+                    System.out.println("    " + (j + 1) + ". " + itemStock[i][j][0] + " - jumlah: " + itemStock[i][j][1]);
                 }
             }
         }
     }
-
 }
