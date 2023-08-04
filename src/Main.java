@@ -8,7 +8,7 @@ public class Main {
             try {
                 // Menampilkan menu dan mendapatkan pilihan dari pengguna
                 int pilih = inputHandler.getIntegerInputWithDigitValidation(tampilMenu());
-                System.out.println("===============================\n");
+                System.out.println("===========================================================================================\n");
                 switch (pilih) {
                     case 0 ->
                         // Jika pengguna memilih 0, lempar Exception untuk keluar dari program
@@ -24,7 +24,7 @@ public class Main {
                         } // Jika pengguna memilih 0, kembali ke menu utama
 
                         // Menampilkan daftar barang dalam kategori yang dipilih dan memanggil metode untuk menambahkan barang baru pada kategori tersebut
-                        System.out.println(stokGudang.displayItemsInCategory(pilih - 1));
+                        System.out.print(stokGudang.displayItemsInCategory(pilih - 1));
                         stokGudang.addItem(pilih - 1);
                     }
                     case 3 ->
@@ -48,15 +48,15 @@ public class Main {
     // Menampilkan menu utama dalam bentuk string
     private static String tampilMenu () {
         return """
-                |============================|
-                |            Menu            |
-                |============================|
-                |  1. Tambah Kategori        |
-                |  2. Tambah Item            |
-                |  3. Update Item            |
-                |  4. Tampilkan Stok Gudang  |
-                |  0. Keluar                 |
-                |============================|
+                |================================|
+                |              Menu              |
+                |================================|
+                |  1. Lihat dan Tambah Kategori  |
+                |  2. Tambah Item                |
+                |  3. Update Jumlah Item         |
+                |  4. Tampilkan Stok Gudang      |
+                |  0. Keluar                     |
+                |================================|
                 Silahkan masukkan pilihan:\s""";
     }
 
