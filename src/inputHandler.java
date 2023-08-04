@@ -25,14 +25,14 @@ public class inputHandler {
         String input = scanner.nextLine().toLowerCase(); // Menerima input dari pengguna dan mengubahnya menjadi huruf kecil
         input = input.replaceAll("\\s+", " "); // Menghilangkan spasi berlebihan
         String[] words = input.split(" "); // Memecah input menjadi array kata-kata
-        String capitalizedText = ""; // Inisialisasi variabel capitalizedText
+        StringBuilder capitalizedText = new StringBuilder(); // Inisialisasi variabel capitalizedText
         for (String word : words) { // Melakukan perulangan untuk setiap kata dalam array words
             // Membuat huruf pertama dari setiap kata menjadi huruf besar
             String capitalizedWord = word.substring(0, 1).toUpperCase() + word.substring(1);
-            capitalizedText += capitalizedWord + " "; // Menambahkan kata yang sudah diubah ke variabel capitalizedText
+            capitalizedText.append(capitalizedWord).append(" "); // Menambahkan kata yang sudah diubah ke variabel capitalizedText
         }
-        capitalizedText = capitalizedText.trim(); // Menghilangkan spasi berlebihan di akhir teks
-        return capitalizedText; // Mengembalikan nilai variabel capitalizedText
+        capitalizedText = new StringBuilder(capitalizedText.toString().trim()); // Menghilangkan spasi berlebihan di akhir teks
+        return capitalizedText.toString(); // Mengembalikan nilai variabel capitalizedText
     }
 
 
@@ -40,11 +40,10 @@ public class inputHandler {
     public String formatAutoSpacingLeft (String text, int maxLengthText) {
         if (text.length() < maxLengthText) { // Jika panjang teks kurang dari panjang maksimum yang diinginkan
             int numSpace = maxLengthText - text.length(); // Menghitung jumlah spasi yang diperlukan
-            String spaceText = text; // Inisialisasi variabel spaceText dengan nilai teks awal
-            for (int i = 0; i < numSpace; i++) { // Melakukan perulangan sebanyak jumlah spasi yang diperlukan
-                spaceText += " "; // Menambahkan karakter spasi ke variabel spaceText
-            }
-            return spaceText; // Mengembalikan nilai variabel spaceText
+            // Melakukan perulangan sebanyak jumlah spasi yang diperlukan
+            return // Inisialisasi variabel spaceText dengan nilai teks awal
+                    text + " ".repeat(numSpace) // Menambahkan karakter spasi ke variabel spaceText
+                    ; // Mengembalikan nilai variabel spaceText
         } else { // Jika panjang teks sudah mencapai atau melebihi panjang maksimum yang diinginkan
             return text; // Mengembalikan nilai teks awal
         }
@@ -54,28 +53,24 @@ public class inputHandler {
     public String formatAutoSpacingCenter (String text, int maxLengthText) {
         if (text.length() < maxLengthText) { // Jika panjang teks kurang dari panjang maksimum yang diinginkan
             int numSpace = maxLengthText - text.length(); // Menghitung jumlah spasi yang diperlukan
-            String spaceText = ""; // Inisialisasi variabel spaceText
+            StringBuilder spaceText = new StringBuilder(); // Inisialisasi variabel spaceText
             if (numSpace % 2 == 1) { // Jika jumlah spasi ganjil
                 numSpace /= 2; // Membagi jumlah spasi dengan 2
-                for (int i = 0; i < numSpace; i++) { // Melakukan perulangan sebanyak setengah jumlah spasi
-                    spaceText += " "; // Menambahkan karakter spasi ke variabel spaceText
-                }
-                spaceText += text; // Menambahkan teks ke variabel spaceText
-                for (int i = 0; i < numSpace + 1; i++) { // Melakukan perulangan sebanyak setengah jumlah spasi ditambah 1
-                    spaceText += " "; // Menambahkan karakter spasi ke variabel spaceText
-                }
+                // Melakukan perulangan sebanyak setengah jumlah spasi
+                spaceText.append(" ".repeat(numSpace)); // Menambahkan karakter spasi ke variabel spaceText
+                spaceText.append(text); // Menambahkan teks ke variabel spaceText
+                // Melakukan perulangan sebanyak setengah jumlah spasi ditambah 1
+                spaceText.append(" ".repeat(numSpace + 1)); // Menambahkan karakter spasi ke variabel spaceText
             } else { // Jika jumlah spasi genap
                 numSpace /= 2; // Membagi jumlah spasi dengan 2
-                for (int i = 0; i < numSpace; i++) { // Melakukan perulangan sebanyak setengah jumlah spasi
-                    spaceText += " "; // Menambahkan karakter spasi ke variabel spaceText
-                }
-                spaceText += text; // Menambahkan teks ke variabel spaceText
-                for (int i = 0; i < numSpace; i++) { // Melakukan perulangan sebanyak setengah jumlah spasi
-                    spaceText += " "; // Menambahkan karakter spasi ke variabel spaceText
-                }
+                // Melakukan perulangan sebanyak setengah jumlah spasi
+                spaceText.append(" ".repeat(numSpace)); // Menambahkan karakter spasi ke variabel spaceText
+                spaceText.append(text); // Menambahkan teks ke variabel spaceText
+                // Melakukan perulangan sebanyak setengah jumlah spasi
+                spaceText.append(" ".repeat(numSpace)); // Menambahkan karakter spasi ke variabel spaceText
             }
 
-            return spaceText; // Mengembalikan nilai variabel spaceText
+            return spaceText.toString(); // Mengembalikan nilai variabel spaceText
         } else { // Jika panjang teks sudah mencapai atau melebihi panjang maksimum yang diinginkan
             return text; // Mengembalikan nilai teks awal
         }
