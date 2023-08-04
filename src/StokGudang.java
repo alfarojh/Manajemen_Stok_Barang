@@ -250,39 +250,25 @@ public class StokGudang {
 
     //  Tampilan judul untuk tabel barang
     private String displayTitle (int indexCategory) {
-        StringBuilder text = new StringBuilder();
         int panjangText = 30; // Menentukan panjang teks yang akan ditampilkan
 
-        text.append(createLine(panjangText))
-                .append("\n")
-                .append("|  Kategori: ")
-                .append(inputHandler.formatAutoSpacingLeft(category[indexCategory], panjangText))
-                .append("  |\n")
-                .append(createLine(panjangText)).append("\n")
-                .append("| ").append(inputHandler.formatAutoSpacingCenter("Id", lengthMaxText()[0]))
-                .append(" | ")
-                .append(inputHandler.formatAutoSpacingCenter("Nama Barang", lengthMaxText()[1]))
-                .append(" | ")
-                .append(inputHandler.formatAutoSpacingCenter("Qty", lengthMaxText()[2]))
-                .append(" |\n")
-                .append(createLine(panjangText));
-
-        return text.toString();
+        return createLine(panjangText) + "\n" +
+                "|  Kategori: " + inputHandler.formatAutoSpacingLeft(category[indexCategory], panjangText) + "  |\n" +
+                createLine(panjangText) + "\n" +
+                "| " + inputHandler.formatAutoSpacingCenter("Id", lengthMaxText()[0]) +
+                " | " +
+                inputHandler.formatAutoSpacingCenter("Nama Barang", lengthMaxText()[1]) +
+                " | " + inputHandler.formatAutoSpacingCenter("Qty", lengthMaxText()[2]) + " |\n" +
+                createLine(panjangText);
     }
 
 
     // Untuk membuat garis penutup berdasarkan panjang text
     private String createLine (int lengthText) {
-        String garis = "|"; // Inisialisasi variabel garis dengan karakter pembuka "|"
-        for (int i = 0; i < 14 + lengthText; i++) { // Melakukan perulangan sebanyak 14 + panjang teks
-            garis += "="; // Menambahkan karakter "=" ke variabel garis
-        }
-        garis += "|"; // Menambahkan karakter penutup "|" ke variabel garis
-        return garis; // Mengembalikan nilai variabel garis
+        return "|" + "=".repeat(Math.max(0, 14 + lengthText)) + "|";
     }
 
     private int[] lengthMaxText () {
-        int[] temp = {4, 27, 5};
-        return temp;
+        return new int[]{4, 27, 5};
     }
 }
