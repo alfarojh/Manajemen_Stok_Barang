@@ -1,8 +1,10 @@
 public class StokGudang {
     private final inputHandler inputHandler = new inputHandler();
-    private String[][][] itemStock = {{{"Baju", "5"}}}; // Database untuk menyimpan stok barang yang berisi informasi nama barang dan jumlahnya
-    private String[] category = {"Pakaian"}; // Database untuk menyimpan daftar kategori barang
-
+    // Database untuk menyimpan stok barang yang berisi informasi nama barang dan jumlahnya
+    private String[][][] itemStock = {
+            {{"Baju", "5"}, {"Celana", "8"}},
+            {{"Nasi", "3"}, {"Ikan", "2"}}};
+    private String[] category = {"Pakaian", "Makanan"}; // Database untuk menyimpan daftar kategori barang
 
     // Fungsi ini menampilkan menu kategori yang ada
     private String displayCategoryMenu() {
@@ -44,8 +46,11 @@ public class StokGudang {
             }
         }
 
+        // Meminta input nama barang dari user
         System.out.print("Masukkan nama barang: ");
         String namaBarang = inputHandler.getUserInputText();
+
+        // Meminta input jumlah item dari user
         String jumlahItem = String.valueOf(inputHandler.getIntegerInputWithDigitValidation("Masukkan jumlah item: "));
 
         // Salin isi array category ke dalam array tmpcategory
@@ -55,7 +60,6 @@ public class StokGudang {
 
         addItemToCategoryInStock(namaBarang, jumlahItem); // Tambahkan barang ke dalam kategori yang baru dibuat
     }
-
 
     // Fungsi ini menambahkan barang baru ke dalam kategori dan stok barang.
     private void addItemToCategoryInStock(String namaBarang, String jumlahItem) {
@@ -80,6 +84,7 @@ public class StokGudang {
 
     // Fungsi ini menambahkan barang baru ke dalam kategori yang sudah ada atau membuat kategori baru jika tidak ada kategori yang sesuai.
     public void addItem(int indexCategory) {
+        // Jika input kategori melebihi jumlah kategori yang tersedia, tampilkan pesan kesalahan
         if (indexCategory >= itemStock.length) {
             inputHandler.errorMessage("Maaf, kategori tidak ditemukan\nBarang gagal ditambahkan!");
             return;
@@ -103,7 +108,8 @@ public class StokGudang {
             }
         }
 
-        String jumlahItem = String.valueOf(inputHandler.getIntegerInputWithDigitValidation("Masukkan jumlah item:"));
+        // Untuk menginput jumlah item yang ingin dimasukkan oleh user
+        String jumlahItem = String.valueOf(inputHandler.getIntegerInputWithDigitValidation("Masukkan jumlah item: "));
 
         // Tambahkan barang ke indeks yang kosong dalam kategori.
         for (int i = 0; i < itemStock[indexCategory].length; i++) {
@@ -138,7 +144,6 @@ public class StokGudang {
         // Timpa array itemStock dengan array tmpArray yang sudah ditambahkan barang baru dalam kategori yang sudah ada.
         itemStock = tmpArray;
     }
-
 
     // Fungsi ini menampilkan daftar item pada kategori tertentu dalam bentuk string
     public String displayItemsInCategory(int indexCategory) {
@@ -180,27 +185,30 @@ public class StokGudang {
 
     // Fungsi ini digunakan untuk mengupdate jumlah item pada kategori dan item yang dipilih
     public void updateItem() {
+        // Memeriksa apakah input merupakan bilangan bulat dan tidak melebihi jumlah kategori yang tersedia
         int indexCategory = inputHandler.getIntegerInputWithDigitValidation(displayCategorySelection());
-
         while (indexCategory > category.length) {
             inputHandler.errorMessage("Input melebihi batas category");
             indexCategory = inputHandler.getIntegerInputWithDigitValidation(displayCategorySelection());
         }
 
+        // Memeriksa apakah input merupakan bilangan bulat dan tidak melebihi jumlah item yang tersedia dalam kategori tertentu
         int indexItem = inputHandler.getIntegerInputWithDigitValidation(displayItemSelectionByCategory(indexCategory));
-
         while (indexItem > itemStock[indexCategory - 1].length) {
             inputHandler.errorMessage("Input melebihi batas item");
             indexItem = inputHandler.getIntegerInputWithDigitValidation(displayItemSelectionByCategory(indexCategory));
         }
 
-        int jumlahItem = inputHandler.getIntegerInputWithDigitValidation("Masukkan jumlah (+/-): ");
+        // Meminta input jumlah item yang akan ditambahkan atau dikurangi
+        int jumlahItem = inputHandler.getIntegerInputWithDigitValidation("Masukkan jumlah item (+/-): ");
 
+        // Memperbarui stok item sesuai dengan input
         updateStockItem(indexCategory, indexItem, jumlahItem);
     }
 
     // Fungsi ini digunakan untuk mengupdate jumlah item pada kategori dan item yang dipilih
     private void updateStockItem(int indexCategory, int indexItem, int jumlahItem) {
+        // Jika jumlah item yang dikurangi kurang dari stok yang tersedia, tampilkan pesan kesalahan
         if (Integer.parseInt(itemStock[indexCategory - 1][indexItem - 1][1]) + jumlahItem >= 0) {
             int convertInt = Integer.parseInt(itemStock[indexCategory - 1][indexItem - 1][1]);
             itemStock[indexCategory - 1][indexItem - 1][1] = String.valueOf(convertInt + jumlahItem);
@@ -212,12 +220,43 @@ public class StokGudang {
     // Fungsi ini menampilkan daftar barang untuk setiap kategori yang ada
     public void displayAllItems() {
         for (int i = 0; i < itemStock.length; i++) {
-            System.out.println("Kategori: " + category[i]);
+            displayTitle(i);
             for (int j = 0; j < itemStock[0].length; j++) {
                 if (itemStock[i][j][0] != null) {
-                    System.out.println("    " + (j + 1) + ". " + itemStock[i][j][0] + " - jumlah: " + itemStock[i][j][1]);
+                    System.out.println("| " + inputHandler.formatAutoSpacingCenter(String.valueOf(j + 1), 4) + " | " +
+                            inputHandler.formatAutoSpacingLeft(itemStock[i][j][0],27) + " | " +
+                            inputHandler.formatAutoSpacingCenter(itemStock[i][j][1],5) + " | ");
                 }
             }
+            System.out.println(garisTabel(30));
+            System.out.println("\n");
         }
     }
+
+    //  Tampilan judul untuk tabel barang
+    private void displayTitle (int index) {
+        int panjangText = 30; // Menentukan panjang teks yang akan ditampilkan
+
+        System.out.println(garisTabel(panjangText)); // Menampilkan garis tabel
+        // Menampilkan kategori dengan format rata kiri dan spasi otomatis
+        System.out.println("|  Kategori: " + inputHandler.formatAutoSpacingLeft(category[index], panjangText) + "  |");
+        System.out.println(garisTabel(panjangText)); // Menampilkan garis tabel
+        // Menampilkan judul kolom dengan format rata tengah dan spasi otomatis
+        System.out.println("| " + inputHandler.formatAutoSpacingCenter("Id", 4) + " | " +
+                inputHandler.formatAutoSpacingCenter("Nama Barang", 27) + " | " +
+                inputHandler.formatAutoSpacingCenter("Qty", 5) + " |");
+        System.out.println(garisTabel(panjangText)); // Menampilkan garis tabel
+    }
+
+
+    // Untuk membuat garis penutup berdasarkan panjang text
+    private String garisTabel (int lengthText) {
+        String garis = "|"; // Inisialisasi variabel garis dengan karakter pembuka "|"
+        for (int i = 0; i < 14 + lengthText; i++) { // Melakukan perulangan sebanyak 14 + panjang teks
+            garis += "="; // Menambahkan karakter "=" ke variabel garis
+        }
+        garis += "|"; // Menambahkan karakter penutup "|" ke variabel garis
+        return garis; // Mengembalikan nilai variabel garis
+    }
+
 }

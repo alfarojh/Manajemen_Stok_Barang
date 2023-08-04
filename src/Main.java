@@ -8,7 +8,7 @@ public class Main {
             try {
                 // Menampilkan menu dan mendapatkan pilihan dari pengguna
                 int pilih = inputHandler.getIntegerInputWithDigitValidation(tampilMenu());
-                System.out.println("===========================\n");
+                System.out.println("===============================\n");
                 switch (pilih) {
                     case 0 ->
                         // Jika pengguna memilih 0, lempar Exception untuk keluar dari program
@@ -33,6 +33,7 @@ public class Main {
                     case 4 ->
                         // Memanggil metode untuk menampilkan daftar semua barang yang ada di dalam gudang
                             stokGudang.displayAllItems();
+                    default -> inputHandler.errorMessage("Maaf, input diluar batas pilihan");
                 }
             } catch (Exception e) {
                 // Menangkap dan menampilkan pesan jika terjadi exception (kesalahan)
@@ -47,13 +48,15 @@ public class Main {
     // Menampilkan menu utama dalam bentuk string
     private static String tampilMenu () {
         return """
-                        Menu
-                ====================
-                1. Tambah Kategori
-                2. Tambah Item
-                3. Update Item
-                4. Tampilkan Stok Gudang
-                0. Keluar
+                |============================|
+                |            Menu            |
+                |============================|
+                |  1. Tambah Kategori        |
+                |  2. Tambah Item            |
+                |  3. Update Item            |
+                |  4. Tampilkan Stok Gudang  |
+                |  0. Keluar                 |
+                |============================|
                 Silahkan masukkan pilihan:\s""";
     }
 
