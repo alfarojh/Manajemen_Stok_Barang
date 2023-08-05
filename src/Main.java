@@ -1,5 +1,4 @@
 public class Main {
-    // Membuat instansi dari kelas StokGudang dan ErrorHandling
     private static final StokGudang stokGudang = new StokGudang();
     private static final inputHandler inputHandler = new inputHandler();
 
@@ -7,32 +6,24 @@ public class Main {
         while (true){
             try {
                 // Menampilkan menu dan mendapatkan pilihan dari pengguna
-                int pilih = inputHandler.getIntegerInputWithDigitValidation(tampilMenu());
+                int choice = inputHandler.getIntegerInputWithDigitValidation(tampilMenu());
                 System.out.println("===========================================================================================\n");
-                switch (pilih) {
-                    case 0 ->
-                        // Jika pengguna memilih 0, lempar Exception untuk keluar dari program
-                            throw new Exception();
-                    case 1 ->
-                        // Memanggil metode untuk menambahkan kategori ke dalam gudang
-                            stokGudang.addCategory();
+                switch (choice) {
+                    case 0 -> throw new Exception(); // Jika pengguna memilih 0, lempar Exception untuk keluar dari program
+                    case 1 -> stokGudang.displayAndAddCategories(); // Memanggil metode untuk menambahkan kategori ke dalam gudang
                     case 2 -> {
                         // Menampilkan daftar kategori dan mendapatkan pilihan kategori dari pengguna
-                        pilih = inputHandler.getIntegerInputWithDigitValidation(tampilItem());
-                        if (pilih == 0) {
-                            continue;
-                        } // Jika pengguna memilih 0, kembali ke menu utama
+                        String choiceCategory = inputHandler.getUserInputTextWithMessage(tampilItem());
+
+                        if (choiceCategory.equals("0")) { continue; } // Jika pengguna memilih 0, kembali ke menu utama
+                        choice = stokGudang.convertCategoryNameToIndex(choiceCategory);
 
                         // Menampilkan daftar barang dalam kategori yang dipilih dan memanggil metode untuk menambahkan barang baru pada kategori tersebut
-                        System.out.print(stokGudang.displayItemsInCategory(pilih - 1));
-                        stokGudang.addItem(pilih - 1);
+                        System.out.print(stokGudang.displayItemsInCategory(choice - 1));
+                        stokGudang.addItem(choice - 1);
                     }
-                    case 3 ->
-                        // Memanggil metode untuk mengupdate barang yang sudah ada di dalam gudang
-                            stokGudang.updateItem();
-                    case 4 ->
-                        // Memanggil metode untuk menampilkan daftar semua barang yang ada di dalam gudang
-                            stokGudang.displayAllItems();
+                    case 3 -> stokGudang.updateItem(); // Memanggil metode untuk mengupdate barang yang sudah ada di dalam gudang
+                    case 4 -> stokGudang.displayAllItems(); // Memanggil metode untuk menampilkan daftar semua barang yang ada di dalam gudang
                     default -> inputHandler.errorMessage("Maaf, input diluar batas pilihan");
                 }
             } catch (Exception e) {
@@ -62,7 +53,7 @@ public class Main {
 
     // Menampilkan daftar kategori dan meminta pengguna untuk memilih kategori dalam bentuk string
     private static String tampilItem () {
-        return stokGudang.displayCategory() +
+        return stokGudang.displayAllCategories() +
                 "0. Keluar\n" +
                 "Silakan pilih kategori: ";
     }

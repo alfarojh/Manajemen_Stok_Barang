@@ -8,7 +8,7 @@ public class inputHandler {
         System.out.println("\u001B[31m" + message + "\u001B[0m\n");
     }
 
-    // Mengecek apakah input adalah bilangan bulat (digit) dan mengembalikan nilai bilangan bulat
+    // Fungsi ini memeriksa apakah input merupakan bilangan bulat (digit) dan mengembalikan nilai bilangan bulat tersebut.
     public int getIntegerInputWithDigitValidation(String message) {
         System.out.print(message); // Menampilkan pesan kepada pengguna dan mendapatkan input
         String input = scanner.nextLine();
@@ -23,7 +23,6 @@ public class inputHandler {
         // Mengubah input menjadi bilangan bulat dan mengembalikannya
         return Integer.parseInt(input);
     }
-
 
     // Menerima input teks dari pengguna dan mengembalikan teks tersebut
     public String getUserInputText() {
@@ -41,6 +40,12 @@ public class inputHandler {
         // Menghapus spasi di akhir teks
         capitalizedText = new StringBuilder(capitalizedText.toString().trim());
         return capitalizedText.toString();
+    }
+
+    // Fungsi ini menerima masukan teks dari pengguna, mengembalikan teks tersebut, dan menampilkan isi pesan sesuai dengan parameter yang ditentukan.
+    public String getUserInputTextWithMessage (String message) {
+        System.out.print(message);
+        return getUserInputText();
     }
 
     // Format untuk menata teks menjadi rata kanan berdasarkan panjang teks dan panjang maksimum yang diinginkan
