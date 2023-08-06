@@ -1,4 +1,4 @@
-public class StokGudang {
+public class WarehouseStock {
     private final inputHandler inputHandler = new inputHandler();
     // Database untuk menyimpan stok barang yang berisi informasi nama barang dan jumlahnya
     private String[][][] itemStock = {
@@ -8,19 +8,19 @@ public class StokGudang {
 
     // Fungsi ini menambahkan kategori baru atau menampilkan barang dalam kategori yang dipilih
     public void displayAndAddCategories() {
-        String nameCategory = inputHandler.getUserInputTextWithMessage(displayCategoryMenu());
-        int indexCategory = convertCategoryNameToIndex(nameCategory);
+        String nameCategory = inputHandler.getUserInputTextWithMessage(displayAddMenuCategory());
+        int indexCategory = convertUserInputToCategoryIndex(nameCategory);
 
         // Jika pengguna memasukkan input di luar batas kategori, tampilkan pesan kesalahan
         while (indexCategory > category.length || indexCategory < 0) {
             inputHandler.errorMessage("Maaf, kategori tidak tersedia.");
             System.out.println();
-            nameCategory = inputHandler.getUserInputTextWithMessage(displayCategoryMenu());
-            indexCategory = convertCategoryNameToIndex(nameCategory);
+            nameCategory = inputHandler.getUserInputTextWithMessage(displayAddMenuCategory());
+            indexCategory = convertUserInputToCategoryIndex(nameCategory);
         }
 
         if (indexCategory == 0) {
-            addCategory(); // Jika pilihan 0, tambahkan kategori baru
+            addCategoryList(); // Jika pilihan 0, tambahkan kategori baru
         } else {
             System.out.println();
             System.out.println(displayItemsInCategory(indexCategory - 1)); // Tampilkan barang dalam kategori yang dipilih
@@ -28,7 +28,7 @@ public class StokGudang {
     }
 
     // Fungsi ini menambahkan kategori baru
-    private void addCategory() {
+    private void addCategoryList() {
         String categoryName = "";
         boolean error = true;
 
@@ -64,11 +64,10 @@ public class StokGudang {
         tempCategory[category.length] = categoryName; // Tambahkan kategori baru ke dalam tempCategory
         category = tempCategory; // Timpa array category dengan array tempCategory yang sudah ditambahkan kategori baru
 
-        addItemToCategoryInStock(itemName, itemCount); // Tambahkan barang ke dalam kategori yang baru dibuat
+        addCategoryInStock(itemName, itemCount); // Tambahkan barang ke dalam kategori yang baru dibuat
     }
-
     // Fungsi ini menambahkan barang baru ke dalam kategori dan stok barang.
-    private void addItemToCategoryInStock(String itemName, String itemCount) {
+    private void addCategoryInStock(String itemName, String itemCount) {
         // Buat array baru dengan ukuran lebih besar untuk menampung barang baru.
         String[][][] tempArray = new String[itemStock.length + 1][1][2];
 
@@ -83,8 +82,21 @@ public class StokGudang {
         itemStock = tempArray;
     }
 
+    // Fungsi ini menambahkan item berdasarkan input pengguna
+    public void addItemByUserInput () {
+        // Menampilkan daftar kategori dan mendapatkan pilihan kategori dari pengguna
+        String choiceCategory = inputHandler.getUserInputTextWithMessage(displayCategoryMenuForUserSelection());
+
+        if (choiceCategory.equals("0")) { return; } // Jika pengguna memilih 0, kembali ke menu utama
+        int choice = convertUserInputToCategoryIndex(choiceCategory);
+
+        // Menampilkan daftar barang dalam kategori yang dipilih dan memanggil metode untuk menambahkan barang baru pada kategori tersebut
+        System.out.print(displayItemsInCategory(choice - 1));
+        addItemWithValidation(choice - 1);
+    }
+    
     // Fungsi ini menambahkan barang baru ke dalam kategori yang sudah ada atau membuat kategori baru jika tidak ada kategori yang sesuai.
-    public void addItem(int indexCategory) {
+    private void addItemWithValidation(int indexCategory) {
         // Jika input kategori melebihi jumlah kategori yang tersedia, tampilkan pesan kesalahan
         if (indexCategory >= itemStock.length || indexCategory < 0) {
             inputHandler.errorMessage("Maaf, kategori tidak ditemukan.\nBarang gagal ditambahkan!");
@@ -115,11 +127,11 @@ public class StokGudang {
 
         // Menambahkan barang baru ke dalam kategori berdasarkan input pengguna dengan memperluas ukuran array itemStock.
         String itemCount = String.valueOf(inputHandler.getIntegerInputWithDigitValidation("Masukkan jumlah item: "));
-        addItemBasedOnStock(indexCategory, itemName, itemCount);
+        addItemByCategoryInStock(indexCategory, itemName, itemCount);
     }
 
     // Fungsi ini menambahkan barang baru ke dalam kategori yang sudah ada dengan memperluas ukuran array.
-    private void addItemBasedOnStock(int indexCategory, String itemName, String itemCount) {
+    private void addItemByCategoryInStock(int indexCategory, String itemName, String itemCount) {
         // Membuat array sementara dengan ukuran yang diperluas
         String[][] tempArray = new String[itemStock[indexCategory].length + 1][2];
 
@@ -137,22 +149,23 @@ public class StokGudang {
     // Fungsi ini digunakan untuk mengupdate jumlah item pada kategori dan item yang dipilih
     public void updateItemQty() {
         // Memeriksa apakah input merupakan bilangan bulat dan tidak melebihi jumlah kategori yang tersedia
-        String nameCategory = inputHandler.getUserInputTextWithMessage(displayCategorySelection());
-        int indexCategory = convertCategoryNameToIndex(nameCategory);
+        String nameCategory = inputHandler.getUserInputTextWithMessage(displayCategoryMenuForUserSelection());
+        int indexCategory = convertUserInputToCategoryIndex(nameCategory);
         while (indexCategory > category.length || indexCategory < 0) {
             inputHandler.errorMessage("Kategori tidak tersedia.");
-            nameCategory = inputHandler.getUserInputTextWithMessage(displayCategorySelection());
-            indexCategory = convertCategoryNameToIndex(nameCategory);
+            nameCategory = inputHandler.getUserInputTextWithMessage(displayCategoryMenuForUserSelection());
+            indexCategory = convertUserInputToCategoryIndex(nameCategory);
         }
+        if (indexCategory == 0) { return; } // Jika pengguna memilih 0, maka kembali ke menu awal
 
         // Memeriksa apakah input merupakan bilangan bulat dan tidak melebihi jumlah item yang tersedia dalam kategori tertentu
-        String nameItem = inputHandler.getUserInputTextWithMessage(displayItemSelectionByCategory(indexCategory));
-        int indexItem = convertItemNameToIndex(indexCategory, nameItem);
+        String nameItem = inputHandler.getUserInputTextWithMessage(displayItemMenuForUserSelection(indexCategory));
+        int indexItem = convertUserInputToItemIndex(indexCategory, nameItem);
         System.out.println("Index item: " + indexItem);
         while (indexItem > itemStock[indexCategory - 1].length || indexItem < 0) {
             inputHandler.errorMessage("Item tidak tersedia.");
-            nameItem = inputHandler.getUserInputTextWithMessage(displayItemSelectionByCategory(indexCategory));
-            indexItem = convertItemNameToIndex(indexCategory, nameItem);
+            nameItem = inputHandler.getUserInputTextWithMessage(displayItemMenuForUserSelection(indexCategory));
+            indexItem = convertUserInputToItemIndex(indexCategory, nameItem);
         }
 
         // Meminta input jumlah item yang akan ditambahkan atau dikurangi
@@ -200,7 +213,7 @@ public class StokGudang {
     }
 
     // Fungsi ini digunakan untuk mengonversi input user berupa nama kategori atau angka menjadi indeks kategori
-    public int convertCategoryNameToIndex (String name) {
+    private int convertUserInputToCategoryIndex (String name) {
         try {
             // Jika pengguna memasukkan input berupa angka
             return Integer.parseInt(name);
@@ -211,7 +224,7 @@ public class StokGudang {
     }
 
     // Fungsi ini digunakan untuk mengonversi input user berupa nama item atau angka menjadi indeks kategori
-    private int convertItemNameToIndex (int indexCategory, String name) {
+    private int convertUserInputToItemIndex (int indexCategory, String name) {
         try {
             // Jika pengguna memasukkan input berupa angka
             return Integer.parseInt(name);
@@ -238,32 +251,27 @@ public class StokGudang {
                     .append("\n");
             // Tampilkan daftar item pada kategori yang dipilih
             for (int indexItem = 0; indexItem < itemStock[indexCategory].length; indexItem++) {
+                if (indexItem % 2 == 0) { text.append("\033[34m"); }
                 text.append("| ")
-                        .append(inputHandler.formatAutoSpacingCenter(String.valueOf(indexItem + 1), lengthMaxText()[0])).append(" | ")
-                        .append(inputHandler.formatAutoSpacingLeft(itemStock[indexCategory][indexItem][0],lengthMaxText()[1])).append(" | ")
-                        .append(inputHandler.formatAutoSpacingCenter(itemStock[indexCategory][indexItem][1],lengthMaxText()[2])).append(" | ").append("\n");
+                        .append(inputHandler.formatAutoSpacingCenter(String.valueOf(indexItem + 1), lengthMaxText()[1][0])).append(" | ")
+                        .append(inputHandler.formatAutoSpacingLeft(itemStock[indexCategory][indexItem][0],lengthMaxText()[1][1])).append(" | ")
+                        .append(inputHandler.formatAutoSpacingCenter(itemStock[indexCategory][indexItem][1],lengthMaxText()[1][2])).append(" | ")
+                        .append("\n").append("\u001B[0m");
             }
-            text.append(createLine(30, '=')).append("\n");
+            text.append(createLine(lengthMaxText()[0][0], '=')).append("\n");
         }
         return text.toString(); // Mengembalikan daftar item pada category yang dipilih dalam bentuk string
     }
 
     // Fungsi ini menampilkan menu kategori yang ada
-    private String displayCategoryMenu() {
+    private String displayAddMenuCategory() {
         return displayAllCategories() +
                 "0. Tambah kategori\n" +
                 "Silahkan masukkan pilihan: ";
     }
 
-    // Fungsi ini menampilkan menu pemilihan kategori dalam bentuk string
-    private String displayCategorySelection() {
-        return "Kategori \n" +
-                displayAllCategories() +
-                "Pilih category yang ingin diupdate: ";
-    }
-
     // Fungsi ini menampilkan menu pemilihan item berdasarkan kategori yang dipilih dalam bentuk string
-    private String displayItemSelectionByCategory(int indexCategory) {
+    private String displayItemMenuForUserSelection(int indexCategory) {
         return displayItemsInCategory(indexCategory - 1) + "\n" +
                 "Pilih item yang ingin diupdate: ";
     }
@@ -277,16 +285,21 @@ public class StokGudang {
 
     //  Tampilan judul untuk tabel barang
     private String displayTitle (int indexCategory) {
-        int panjangText = 30; // Menentukan panjang teks yang akan ditampilkan
-
-        return createLine(panjangText, '=') + "\n" +
-                "|  Kategori: " + inputHandler.formatAutoSpacingLeft(category[indexCategory], panjangText) + "  |\n" +
-                createLine(panjangText, '=') + "\n" +
-                "| " + inputHandler.formatAutoSpacingCenter("Id", lengthMaxText()[0]) +
+        return createLine(lengthMaxText()[0][0], '=') + "\n" +
+                "|  Kategori: " + inputHandler.formatAutoSpacingLeft(category[indexCategory], lengthMaxText()[0][0]) + "  |\n" +
+                createLine(lengthMaxText()[0][0], '=') + "\n" +
+                "| " + inputHandler.formatAutoSpacingCenter("Id", lengthMaxText()[1][0]) +
                 " | " +
-                inputHandler.formatAutoSpacingCenter("Nama Barang", lengthMaxText()[1]) +
-                " | " + inputHandler.formatAutoSpacingCenter("Qty", lengthMaxText()[2]) + " |\n" +
-                createLine(panjangText, '-');
+                inputHandler.formatAutoSpacingCenter("Nama Barang", lengthMaxText()[1][1]) +
+                " | " + inputHandler.formatAutoSpacingCenter("Qty", lengthMaxText()[1][2]) + " |\n" +
+                createLine(lengthMaxText()[0][0], '-');
+    }
+
+    // Menampilkan daftar kategori dan meminta pengguna untuk memilih kategori dalam bentuk string
+    private String displayCategoryMenuForUserSelection () {
+        return displayAllCategories() +
+                "0. Keluar\n" +
+                "Silakan pilih kategori: ";
     }
 
     // Untuk membuat garis penutup berdasarkan panjang text
@@ -295,7 +308,14 @@ public class StokGudang {
     }
 
     // Mengatur lebar colomn pada tabel
-    private int[] lengthMaxText () {
-        return new int[]{4, 27, 5};
+    private int[][] lengthMaxText () {
+        /*
+            Kolom ke-0 : Id
+            Kolom ke-1 : Nama Barang
+            Kolom ke-2 : Qty
+        */
+        int[] widthColumn = {4, 29, 7};
+        int lengthText = widthColumn[0] + widthColumn[1] + widthColumn[2] - 6;
+        return new int[][] {{lengthText}, widthColumn};
     }
 }
