@@ -29,13 +29,12 @@ public class StokGudang {
 
     // Fungsi ini menambahkan kategori baru
     private void addCategory() {
-        String[] tempCategory = new String[category.length + 1];
         String categoryName = "";
         boolean error = true;
 
         while (error) {
             error = false;
-            System.out.print("Berikan nama category: ");
+            System.out.print("Berikan nama kategori: ");
             categoryName = inputHandler.getUserInputText();
 
             // Pengguna akan kembali ke menu utama ketika mengetik kata 'keluar'
@@ -60,6 +59,7 @@ public class StokGudang {
         String itemCount = String.valueOf(inputHandler.getIntegerInputWithDigitValidation("Masukkan jumlah item: "));
 
         // Salin isi array category ke dalam array tempCategory
+        String[] tempCategory = new String[category.length + 1];
         System.arraycopy(category, 0, tempCategory, 0, category.length);
         tempCategory[category.length] = categoryName; // Tambahkan kategori baru ke dalam tempCategory
         category = tempCategory; // Timpa array category dengan array tempCategory yang sudah ditambahkan kategori baru
@@ -70,22 +70,17 @@ public class StokGudang {
     // Fungsi ini menambahkan barang baru ke dalam kategori dan stok barang.
     private void addItemToCategoryInStock(String itemName, String itemCount) {
         // Buat array baru dengan ukuran lebih besar untuk menampung barang baru.
-        String[][][] tmpArray = new String[itemStock.length + 1][itemStock[0].length][2];
+        String[][][] tempArray = new String[itemStock.length + 1][1][2];
 
-        // Salin isi array itemStock ke dalam tmpArray.
-        for (int indexCategory = 0; indexCategory < itemStock.length; indexCategory++) {
-            for (int indexItem = 0; indexItem < itemStock[0].length; indexItem++) {
-                tmpArray[indexCategory][indexItem][0] = itemStock[indexCategory][indexItem][0];
-                tmpArray[indexCategory][indexItem][1] = itemStock[indexCategory][indexItem][1];
-            }
-        }
+        // Salin isi array itemStock ke dalam tempArray.
+        System.arraycopy(itemStock, 0, tempArray, 0, itemStock.length);
 
-        // Tambahkan barang baru ke dalam tmpArray.
-        tmpArray[itemStock.length][0][0] = itemName;
-        tmpArray[itemStock.length][0][1] = itemCount;
+        // Tambahkan barang baru ke dalam tempArray.
+        tempArray[tempArray.length - 1][0][0] = itemName;
+        tempArray[tempArray.length - 1][0][1] = itemCount;
 
-        // Timpa array itemStock dengan array tmpArray yang sudah ditambahkan barang baru.
-        itemStock = tmpArray;
+        // Timpa array itemStock dengan array tempArray yang sudah ditambahkan barang baru.
+        itemStock = tempArray;
     }
 
     // Fungsi ini menambahkan barang baru ke dalam kategori yang sudah ada atau membuat kategori baru jika tidak ada kategori yang sesuai.
