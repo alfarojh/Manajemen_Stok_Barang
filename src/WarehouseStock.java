@@ -82,6 +82,10 @@ public class WarehouseStock {
         itemStock = tempArray;
     }
 
+    public void removeCategory () {
+        System.out.print(displayAllCategories());
+        System.out.print("Pilih kategori yang ingin dihapus");
+    }
     // Fungsi ini menambahkan item berdasarkan input pengguna
     public void addItemByUserInput () {
         // Menampilkan daftar kategori dan mendapatkan pilihan kategori dari pengguna

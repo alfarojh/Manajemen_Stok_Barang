@@ -13,7 +13,8 @@ public class Main {
                     case 1 -> warehouseStock.displayAndAddCategories(); // Memanggil metode untuk menambahkan kategori ke dalam gudang
                     case 2 -> warehouseStock.addItemByUserInput(); // Memanggil metode untuk menambah item ke dalam gudang
                     case 3 -> warehouseStock.updateItemQty(); // Memanggil metode untuk mengupdate barang yang sudah ada di dalam gudang
-                    case 4 -> warehouseStock.displayAllItems(); // Memanggil metode untuk menampilkan daftar semua barang yang ada di dalam gudang
+                    case 5 -> warehouseStock.removeCategory(); // Memanggil metode untuk mengupdate barang yang sudah ada di dalam gudang
+                    case 7 -> warehouseStock.displayAllItems(); // Memanggil metode untuk menampilkan daftar semua barang yang ada di dalam gudang
                     default -> inputHandler.errorMessage("Maaf, input diluar batas pilihan");
                 }
             } catch (Exception e) {
@@ -35,7 +36,10 @@ public class Main {
                 |  1. Lihat dan Tambah Kategori  |
                 |  2. Tambah Item                |
                 |  3. Update Jumlah Item         |
-                |  4. Tampilkan Stok Gudang      |
+                |  4. Ganti Nama                 |
+                |  5. Hapus Kategori             |
+                |  6. Hapus Item                 |
+                |  7. Tampilkan Stok Gudang      |
                 |  0. Keluar                     |
                 |================================|
                 Silahkan masukkan pilihan:\s""";
