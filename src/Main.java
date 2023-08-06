@@ -22,7 +22,7 @@ public class Main {
                         System.out.print(stokGudang.displayItemsInCategory(choice - 1));
                         stokGudang.addItem(choice - 1);
                     }
-                    case 3 -> stokGudang.updateItem(); // Memanggil metode untuk mengupdate barang yang sudah ada di dalam gudang
+                    case 3 -> stokGudang.updateItemQty(); // Memanggil metode untuk mengupdate barang yang sudah ada di dalam gudang
                     case 4 -> stokGudang.displayAllItems(); // Memanggil metode untuk menampilkan daftar semua barang yang ada di dalam gudang
                     default -> inputHandler.errorMessage("Maaf, input diluar batas pilihan");
                 }

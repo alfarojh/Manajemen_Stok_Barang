@@ -118,45 +118,29 @@ public class StokGudang {
             }
         }
 
-        // Untuk menginput jumlah item yang ingin dimasukkan oleh user
+        // Menambahkan barang baru ke dalam kategori berdasarkan input pengguna dengan memperluas ukuran array itemStock.
         String itemCount = String.valueOf(inputHandler.getIntegerInputWithDigitValidation("Masukkan jumlah item: "));
-
-        // Tambahkan barang ke indeks yang kosong dalam kategori.
-        for (int indexItem = 0; indexItem < itemStock[indexCategory].length; indexItem++) {
-            if (itemStock[indexCategory][indexItem][0] == null) {
-                itemStock[indexCategory][indexItem][0] = itemName;
-                itemStock[indexCategory][indexItem][1] = itemCount;
-                return; // Keluar dari fungsi setelah barang ditambahkan.
-            }
-        }
-
-        // Jika tidak ada indeks kosong, tambahkan barang baru ke dalam kategori dengan ukuran array itemStock yang diperbesar.
         addItemBasedOnStock(indexCategory, itemName, itemCount);
     }
 
-    // Fungsi ini menambahkan barang baru ke dalam kategori yang sudah ada dengan memperluas ukuran array itemStock jika kategori tersebut belum memiliki indeks kosong.
+    // Fungsi ini menambahkan barang baru ke dalam kategori yang sudah ada dengan memperluas ukuran array.
     private void addItemBasedOnStock(int indexCategory, String itemName, String itemCount) {
-        // Buat array baru dengan ukuran lebih besar untuk menampung barang baru dalam kategori yang sudah ada.
-        String[][][] tmpArray = new String[itemStock.length][itemStock[0].length + 1][2];
+        // Membuat array sementara dengan ukuran yang diperluas
+        String[][] tempArray = new String[itemStock[indexCategory].length + 1][2];
 
-        // Salin isi array itemStock ke dalam tmpArray.
-        for (int categoryIndex = 0; categoryIndex < itemStock.length; categoryIndex++) {
-            for (int indexItem = 0; indexItem < itemStock[0].length; indexItem++) {
-                tmpArray[categoryIndex][indexItem][0] = itemStock[categoryIndex][indexItem][0];
-                tmpArray[categoryIndex][indexItem][1] = itemStock[categoryIndex][indexItem][1];
-            }
-        }
+        // Menyalin data dari array lama ke array sementara
+        System.arraycopy(itemStock[indexCategory], 0, tempArray, 0, tempArray.length - 1);
 
-        // Tambahkan barang baru ke dalam tmpArray pada indeks yang baru.
-        tmpArray[indexCategory][itemStock[0].length][0] = itemName;
-        tmpArray[indexCategory][itemStock[0].length][1] = itemCount;
+        // Menambahkan data barang baru ke array sementara
+        tempArray[tempArray.length - 1][0] = itemName;
+        tempArray[tempArray.length - 1][1] = itemCount;
 
-        // Timpa array itemStock dengan array tmpArray yang sudah ditambahkan barang baru dalam kategori yang sudah ada.
-        itemStock = tmpArray;
+        // Mengganti array lama dengan array sementara yang sudah diperluas
+        itemStock[indexCategory] = tempArray;
     }
 
     // Fungsi ini digunakan untuk mengupdate jumlah item pada kategori dan item yang dipilih
-    public void updateItem() {
+    public void updateItemQty() {
         // Memeriksa apakah input merupakan bilangan bulat dan tidak melebihi jumlah kategori yang tersedia
         String nameCategory = inputHandler.getUserInputTextWithMessage(displayCategorySelection());
         int indexCategory = convertCategoryNameToIndex(nameCategory);
@@ -258,13 +242,11 @@ public class StokGudang {
             text.append(displayTitle(indexCategory))
                     .append("\n");
             // Tampilkan daftar item pada kategori yang dipilih
-            for (int indexItem = 0; indexItem < itemStock[0].length; indexItem++) {
-                if (itemStock[indexCategory][indexItem][0] != null) {
-                    text.append("| ")
-                            .append(inputHandler.formatAutoSpacingCenter(String.valueOf(indexItem + 1), lengthMaxText()[0])).append(" | ")
-                            .append(inputHandler.formatAutoSpacingLeft(itemStock[indexCategory][indexItem][0],lengthMaxText()[1])).append(" | ")
-                            .append(inputHandler.formatAutoSpacingCenter(itemStock[indexCategory][indexItem][1],lengthMaxText()[2])).append(" | ").append("\n");
-                }
+            for (int indexItem = 0; indexItem < itemStock[indexCategory].length; indexItem++) {
+                text.append("| ")
+                        .append(inputHandler.formatAutoSpacingCenter(String.valueOf(indexItem + 1), lengthMaxText()[0])).append(" | ")
+                        .append(inputHandler.formatAutoSpacingLeft(itemStock[indexCategory][indexItem][0],lengthMaxText()[1])).append(" | ")
+                        .append(inputHandler.formatAutoSpacingCenter(itemStock[indexCategory][indexItem][1],lengthMaxText()[2])).append(" | ").append("\n");
             }
             text.append(createLine(30, '=')).append("\n");
         }
@@ -294,8 +276,7 @@ public class StokGudang {
     // Fungsi ini menampilkan daftar barang untuk setiap kategori yang ada
     public void displayAllItems() {
         for (int indexCategory = 0; indexCategory < itemStock.length; indexCategory++) {
-            System.out.println(displayItemsInCategory(indexCategory));
-            System.out.println("\n");
+            System.out.println(displayItemsInCategory(indexCategory) + "\n");
         }
     }
 
