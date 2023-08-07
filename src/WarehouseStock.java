@@ -84,7 +84,9 @@ public class WarehouseStock {
 
     public void removeCategory () {
         System.out.print(displayAllCategories());
+        System.out.println("0. Keluar");
         System.out.print("Pilih kategori yang ingin dihapus");
+        String nameCategory = inputHandler.getUserInputText();
     }
     // Fungsi ini menambahkan item berdasarkan input pengguna
     public void addItemByUserInput () {
