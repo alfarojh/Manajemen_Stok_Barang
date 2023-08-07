@@ -14,7 +14,7 @@ public class inputHandler {
         String input = scanner.nextLine().trim();
 
         // Melakukan validasi untuk memastikan input hanya berisi digit
-        while (!input.matches("\\d+")) {
+        while (!input.matches("^[-+]?\\d+")) {
             // Jika input tidak valid, tampilkan pesan kesalahan dan minta input lagi
             errorMessage("Maaf, harap masukkan input berupa bilangan bulat");
             System.out.print(message);
@@ -22,6 +22,10 @@ public class inputHandler {
         }
         // Mengubah input menjadi bilangan bulat dan mengembalikannya
         return Integer.parseInt(input);
+    }
+
+    public void delayInput () {
+        scanner.nextLine();
     }
 
     // Menerima input teks dari pengguna dan mengembalikan teks tersebut

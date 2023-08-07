@@ -6,7 +6,7 @@ public class Main {
         while (true){
             try {
                 // Menampilkan menu dan mendapatkan pilihan dari pengguna
-                int choice = inputHandler.getIntegerInputWithDigitValidation(tampilMenu());
+                int choice = inputHandler.getIntegerInputWithDigitValidation(displayMenu());
                 System.out.println("===========================================================================================\n");
                 switch (choice) {
                     case 0 -> throw new Exception(); // Jika pengguna memilih 0, lempar Exception untuk keluar dari program
@@ -24,10 +24,11 @@ public class Main {
             System.out.println("\n\n");
         }
         inputHandler.close();
+        warehouseStock.close();
     }
 
     // Menampilkan menu utama dalam bentuk string
-    private static String tampilMenu () {
+    private static String displayMenu () {
         return """
                 |================================|
                 |              Menu              |

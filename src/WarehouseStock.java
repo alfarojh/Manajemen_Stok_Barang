@@ -50,6 +50,7 @@ public class WarehouseStock {
                 }
             }
         }
+        if (categoryName.equalsIgnoreCase("keluar")) { return; }
 
         // Meminta input nama barang dari user
         System.out.print("Masukkan nama barang: ");
@@ -66,6 +67,7 @@ public class WarehouseStock {
 
         addCategoryInStock(itemName, itemCount); // Tambahkan barang ke dalam kategori yang baru dibuat
     }
+
     // Fungsi ini menambahkan barang baru ke dalam kategori dan stok barang.
     private void addCategoryInStock(String itemName, String itemCount) {
         // Buat array baru dengan ukuran lebih besar untuk menampung barang baru.
@@ -117,13 +119,15 @@ public class WarehouseStock {
             // Periksa apakah barang dengan nama yang sama sudah ada dalam kategori yang dipilih.
             for (int indexItem = 0; indexItem < itemStock[indexCategory].length; indexItem++) {
                 if (itemName.equals(itemStock[indexCategory][indexItem][0])) {
-                    inputHandler.errorMessage("Barang sudah ada!");
+                    inputHandler.errorMessage("Barang sudah ada, silahkan ketik ulang.>");
                     System.out.println("Ketik 'keluar' untuk kembali ke menu utama.");
                     error = true;
                     break;
                 }
             }
         }
+
+        if (itemName.equalsIgnoreCase("keluar")) { return; }
 
         // Menambahkan barang baru ke dalam kategori berdasarkan input pengguna dengan memperluas ukuran array itemStock.
         String itemCount = String.valueOf(inputHandler.getIntegerInputWithDigitValidation("Masukkan jumlah item: "));
@@ -162,16 +166,19 @@ public class WarehouseStock {
         String nameItem = inputHandler.getUserInputTextWithMessage(displayItemMenuForUserSelection(indexCategory));
         int indexItem = convertUserInputToItemIndex(indexCategory, nameItem);
         while (indexItem > itemStock[indexCategory - 1].length || indexItem < 0) {
-            inputHandler.errorMessage("Item tidak tersedia.");
+            inputHandler.errorMessage("Item tidak tersedia, silahkan masukkan ulang atau pilih '0' untuk keluar.");
             nameItem = inputHandler.getUserInputTextWithMessage(displayItemMenuForUserSelection(indexCategory));
             indexItem = convertUserInputToItemIndex(indexCategory, nameItem);
         }
+        if (indexItem == 0) { return; } // Jika pengguna memilih 0, maka kembali ke menu awal
 
         // Meminta input jumlah item yang akan ditambahkan atau dikurangi
         int itemCount = inputHandler.getIntegerInputWithDigitValidation("Masukkan jumlah item (+/-): ");
 
         // Memperbarui stok item sesuai dengan input
         updateStockItem(indexCategory, indexItem, itemCount);
+        System.out.println("\n" + displayItemsInCategory(indexCategory - 1));
+        inputHandler.delayInput();
     }
 
     // Fungsi ini digunakan untuk mengupdate jumlah item pada kategori dan item yang dipilih
@@ -183,6 +190,11 @@ public class WarehouseStock {
         } else {
             inputHandler.errorMessage("Maaf, item tidak mencukupi");
         }
+    }
+
+    // Menutup scanner
+    public void close () {
+        inputHandler.close();
     }
 
     // Fungsi ini digunakan untuk mencari indeks kategori berdasarkan nama kategorinya
@@ -201,7 +213,7 @@ public class WarehouseStock {
     // Fungsi ini digunakan untuk mencari indeks item berdasarkan nama item di kategori tertentu
     private int getIndexByItemName (int indexCategory, String itemName) {
         // Melakukan perulangan untuk mencari indeks item berdasarkan nama item
-        for (int indexItem = 0; indexItem < itemStock[indexCategory].length; indexItem++) {
+        for (int indexItem = 0; indexItem < itemStock[indexCategory - 1].length; indexItem++) {
             // Memeriksa apakah nama item sama dengan item yang dicari
             if (itemStock[indexCategory-1][indexItem][0].equals(itemName)) {
                 return indexItem + 1; // Mengembalikan indeks item yang ditemukan ditambah 1 agar sesuai list
@@ -280,6 +292,7 @@ public class WarehouseStock {
         for (int indexCategory = 0; indexCategory < itemStock.length; indexCategory++) {
             System.out.println(displayItemsInCategory(indexCategory) + "\n");
         }
+        inputHandler.delayInput();
     }
 
     //  Tampilan judul untuk tabel barang
