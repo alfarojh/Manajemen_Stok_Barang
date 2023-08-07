@@ -11,7 +11,7 @@ public class inputHandler {
     // Fungsi ini memeriksa apakah input merupakan bilangan bulat (digit) dan mengembalikan nilai bilangan bulat tersebut.
     public int getIntegerInputWithDigitValidation(String message) {
         System.out.print(message); // Menampilkan pesan kepada pengguna dan mendapatkan input
-        String input = scanner.nextLine();
+        String input = scanner.nextLine().trim();
 
         // Melakukan validasi untuk memastikan input hanya berisi digit
         while (!input.matches("\\d+")) {
@@ -26,7 +26,7 @@ public class inputHandler {
 
     // Menerima input teks dari pengguna dan mengembalikan teks tersebut
     public String getUserInputText() {
-        String input = scanner.nextLine().toLowerCase(); // Mendapatkan input dari pengguna dan mengubah semua huruf menjadi huruf kecil
+        String input = scanner.nextLine().toLowerCase().trim(); // Mendapatkan input dari pengguna dan mengubah semua huruf menjadi huruf kecil
         input = input.replaceAll("\\s+", " "); // Menghapus spasi berlebih
         String[] words = input.split(" "); // Memecah teks menjadi kata-kata
         StringBuilder capitalizedText = new StringBuilder();
