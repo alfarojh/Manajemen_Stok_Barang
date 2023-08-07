@@ -161,7 +161,6 @@ public class WarehouseStock {
         // Memeriksa apakah input merupakan bilangan bulat dan tidak melebihi jumlah item yang tersedia dalam kategori tertentu
         String nameItem = inputHandler.getUserInputTextWithMessage(displayItemMenuForUserSelection(indexCategory));
         int indexItem = convertUserInputToItemIndex(indexCategory, nameItem);
-        System.out.println("Index item: " + indexItem);
         while (indexItem > itemStock[indexCategory - 1].length || indexItem < 0) {
             inputHandler.errorMessage("Item tidak tersedia.");
             nameItem = inputHandler.getUserInputTextWithMessage(displayItemMenuForUserSelection(indexCategory));
